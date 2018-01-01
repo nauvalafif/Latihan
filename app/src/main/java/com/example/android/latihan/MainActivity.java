@@ -4,6 +4,9 @@ import java.text.NumberFormat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -37,9 +40,20 @@ public class MainActivity extends AppCompatActivity {
         int numberOfCoffees = quantity;
         display(numberOfCoffees);
         price = calculatePrice(numberOfCoffees);
-        String priceMessage = createOrderSummary(price);
+        String krim = Boolean.toString(checkedorNot(R.id.krim_checkbox));
+        String coklat = Boolean.toString(checkedorNot(R.id.coklat_checkbox));
+        String priceMessage = createOrderSummary(price, krim, coklat);
         displayMessage(priceMessage);
 
+        if ((checkedorNot(R.id.krim_checkbox)) && (checkedorNot(R.id.coklat_checkbox))) {
+            displayPic(R.drawable.kopi_krim_coklat);
+        } else if (checkedorNot(R.id.krim_checkbox)) {
+            displayPic(R.drawable.kopi_krim);
+        } else if (checkedorNot(R.id.coklat_checkbox)) {
+            displayPic(R.drawable.kopi_coklat);
+        } else {
+            displayPic(R.drawable.kopi);
+        }
     }
 
     public int calculatePrice(int quantity) {
@@ -47,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
         return quantity*10000;
     }
 
-    public String createOrderSummary(int harga) {
-        return "Nama : Daffa Daneswara" + '\n' + "Quantity : " + quantity + '\n' + "Total : " + NumberFormat.getCurrencyInstance().format(harga) + '\n' + "Thank You !";
+    public String createOrderSummary(int harga, String krim, String coklat) {
+        return "Name : Daffa Daneswara" + '\n' + "Dikeki krim? " + krim + '\n' + "Dikeki coklat? " + coklat + '\n' + "Quantity : " + quantity + '\n' + "Total : " + NumberFormat.getCurrencyInstance().format(harga) + '\n' + "Thank You !";
 
     }
     /**
@@ -69,5 +83,15 @@ public class MainActivity extends AppCompatActivity {
     private void displayMessage(String message) {
         TextView orderSummaryTextView = (TextView) findViewById(R.id.order_summary_text_view);
         orderSummaryTextView.setText(message);
+    }
+
+    private boolean checkedorNot(int id) {
+        CheckBox cekboks = (CheckBox) findViewById(id);
+        return cekboks.isChecked();
+    }
+
+    private void displayPic(int idpic) {
+        ImageView gambarkopi = (ImageView) findViewById(R.id.gambar_kopi);
+        gambarkopi.setImageResource(idpic);
     }
 }
