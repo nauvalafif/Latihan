@@ -10,8 +10,8 @@ import android.widget.TextView;
  * This app displays an order form to order coffee.
  */
 public class MainActivity extends AppCompatActivity {
-    int quantity = 2;
-    int price = 10000;
+    int quantity = 0;
+    int price;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,21 +24,33 @@ public class MainActivity extends AppCompatActivity {
     public void increment(View view) {
         quantity = quantity+1;
         display(quantity);
+        displayPrice(calculatePrice(quantity));
     }
     public void decrement(View view) {
-        quantity = quantity-1;
+        if (quantity!=0) {
+            quantity = quantity-1;
+        }
         display(quantity);
+        displayPrice(calculatePrice(quantity));
     }
     public void submitOrder(View view) {
         int numberOfCoffees = quantity;
         display(numberOfCoffees);
-        displayPrice(calculatePrice(quantity,price));
+        price = calculatePrice(numberOfCoffees);
+        String priceMessage = createOrderSummary(price);
+        displayMessage(priceMessage);
+
     }
 
-    public int calculatePrice(int quantity, int price) {
-        return quantity*price;
+    public int calculatePrice(int quantity) {
+
+        return quantity*10000;
     }
 
+    public String createOrderSummary(int harga) {
+        return "Nama : Daffa Daneswara" + '\n' + "Quantity : " + quantity + '\n' + "Total : " + NumberFormat.getCurrencyInstance().format(harga) + '\n' + "Thank You !";
+
+    }
     /**
      * This method displays the given quantity value on the screen.
      */
@@ -51,7 +63,11 @@ public class MainActivity extends AppCompatActivity {
      * This method displays the given price on the screen.
      */
     private void displayPrice(int number) {
-        TextView priceTextView = (TextView) findViewById(R.id.price_text_view);
+        TextView priceTextView = (TextView) findViewById(R.id.order_summary_text_view);
         priceTextView.setText(NumberFormat.getCurrencyInstance().format(number));
+    }
+    private void displayMessage(String message) {
+        TextView orderSummaryTextView = (TextView) findViewById(R.id.order_summary_text_view);
+        orderSummaryTextView.setText(message);
     }
 }
